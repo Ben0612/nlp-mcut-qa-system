@@ -21,14 +21,12 @@
 | **合計** | 9 | 410 | 351 |
 
 **問題 (2–3 句)：** 清洗後 chunk 數量變少了多少？是哪個任務造成的？有沒有哪個任務**不影響** chunk 數量？為什麼？
-1.59 
-2.1-A 移除部分帶 ## 的重複法規名稱，使 chunk 從 410 降至 396，1-B 移除合併後的英文標題標記，使數量再降至 351 
-3.1-C 
-4.因為1-C處理的是 - Article 清單項目，所以不會影響Chunk的數量
+1、59 
+2、1-A 移除部分帶 ## 的重複法規名稱，使 chunk 從 410 降至 396，1-B 移除合併後的英文標題標記，使數量再降至 351 
+3、1-C 
+4、因為1-C處理的是 - Article 清單項目，所以不會影響Chunk的數量
 
 > 提示：chunk 是用什麼規則切開的？請看 notebook 第 5 節的 `chunking_regex`。
-
-___
 
 ## 2. 清洗步驟 (Cleaning Steps)
 
@@ -41,33 +39,39 @@ ___
 > 2. 對同一份文件的 `cleaned_<檔名>.md` 按右鍵 → **Compare with Selected**。
 > 3. 左右並排顯示，紅色 = 刪除，綠色 = 新增或修改。按 `Ctrl + F` 搜尋，找到該任務造成的變更。
 > 4. 每個任務截**一張**圖，存到 `reports/figures/`，**檔名必須完全相同** (否則圖片不會顯示)：
->    * 任務 1-A → `1a_compare.png`
->    * 任務 1-B → `1b_compare.png`
->    * 任務 1-C → `1c_compare.png`
+>    * 任務 1-A → `1a_compare.png`
+>    * 任務 1-B → `1b_compare.png`
+>    * 任務 1-C → `1c_compare.png`
 
 ### 2.1 任務 1-A：頁首頁尾溢出清除
 
-- 檔名：1a_compare 搜尋的文字：第七條 學分費用
-- 截圖 (存為 `reports/figures/1a_compare.png`)：![1-A](reports/figures/1a_compare.png)
-- 改變了什麼：Raw 第 55、59 行各有一處單獨出現的法規名稱，清洗後兩處都被移除。第 59 行原本帶有 ##，刪除後少了一個切塊邊界。停修後已繳費用不退、未繳費須先補繳的規定仍保留在 Cleaned 第 51 行。
-- 這對之後的問答檢索有什麼幫助：查詢「期中停修會退學分費嗎」時，減少重複的法規名稱被切成獨立區塊、佔用檢索結果的機會。
-- 這個任務有沒有**改錯**的地方 (把不該改的也改了)？若有，寫出檔名與搜尋的文字；若沒有，寫「沒有發現」：沒有發現
+- 檔名：raw_A231060004_學生申請期中停修課程實施要點.md、cleaned_A231060004_學生申請期中停修課程實施要點.md
+- 搜尋文字：第七條 學分費用
+- 改變了什麼：Raw 第 55、59 行的重複法規名稱被刪除，第 59 行原本帶有 ##，刪除後少了一個切塊邊界，停修後已繳費用不退、未繳費須先補繳的規定仍在 Cleaned 第 51 行
+- 對問答檢索的幫助：查詢停修是否退費時，減少重複法規名稱形成的區塊佔據檢索結果的機會
+- 有沒有改錯：有，在同一份 Raw 檔案搜尋 A031060004，第 7 行位於規章編號與制定部門之間，是文件開頭的正式法規名稱，也被刪除了
+
+![1-A 頁首頁尾清洗前後對照](reports/figures/1a_compare.png)
 
 ### 2.2 任務 1-B：雙語標題合併
 
-- 檔名：1b_compare　搜尋的文字：第二章 館藏政策
-- 截圖 (存為 `reports/figures/1b_compare.png`)：![1-B](reports/figures/1b_compare.png)
-- 改變了什麼：Raw 第 184 行的中文標題與第 186 行的英文標題原本各有一個 ##。清洗後合併在第 180 行，成為 ## 第二章 館藏政策 / Chapter 2 Collection Policy。
-- 這對之後的問答檢索有什麼幫助：搜尋「館藏政策」或 Collection Policy 時，兩種語言都能對應到同一個章節標題，減少檢索到只有標題的獨立區塊。
-- 這個任務有沒有**改錯**的地方 (把不該改的也改了)？若有，寫出檔名與搜尋的文字；若沒有，寫「沒有發現」：沒有發現
+- 檔名：raw_A271010023_圖書館管理作業規範.md、cleaned_A271010023_圖書館管理作業規範.md
+- 搜尋文字：第二章 館藏政策
+- 改變了什麼：Raw 第 184、186 行的中英文標題原本各有一個 ##，清洗後合併成第 180 行的 ## 第二章 館藏政策 / Chapter 2 Collection Policy
+- 對問答檢索的幫助：搜尋「館藏政策」或 Collection Policy 時，可對應到同一個章節標題，減少找回只有標題的獨立區塊
+- 有沒有改錯：有，在 cleaned_A273020009_學生宿舍學術網路使用及管理辦法.md 搜尋 表號：A073020109，第 247 行將表單編號與英文表單名稱 Report of Prevention and Correction 合併成一個標題
+
+![1-B 雙語標題清洗前後對照](reports/figures/1b_compare.png)
 
 ### 2.3 任務 1-C：雙語條文合併
 
-- 檔名：1c_compare　搜尋的文字：第二條 適用對象
-- 截圖 (存為 `reports/figures/1c_compare.png`)：![1-C](reports/figures/1c_compare.png)
-- 改變了什麼：Raw 第 115、116 行分別列出中文第二條與 Article 2 Applicability。清洗後移除英文項目前的 -，用 / 將兩者接在 Cleaned 第 110 行，英文正文仍保留在第 112 行。
-- 這對之後的問答檢索有什麼幫助：查詢「延修生能不能請假」時，找回的段落可以同時提供中文的適用對象與對應的英文條號，方便核對。
-- 這個任務有沒有**改錯**的地方 (把不該改的也改了)？若有，寫出檔名與搜尋的文字；若沒有，寫「沒有發現」：沒有發現
+- 檔名：raw_A242060013_學生請假作業辦法.md、cleaned_A242060013_學生請假作業辦法.md
+- 搜尋文字：第二條 適用對象
+- 改變了什麼：Raw 第 115、116 行分開列出中文第二條與 Article 2 Applicability，清洗後移除英文項目前的 -，用 / 把兩者接在第 110 行，英文正文仍保留在第 112 行
+- 對問答檢索的幫助：查詢「延修生能不能請假」時，可在同一段找到適用對象與對應的英文條號
+- 有沒有改錯：有，在 cleaned_A271010023_圖書館管理作業規範.md 搜尋 Article 27 The Library adheres，第 737 行把英文第二十七條的開頭接到中文第十款末尾，詳見第 4 節
+
+![1-C 雙語條文清洗前後對照](reports/figures/1c_compare.png)
 
 ## 3. 評估指標與 AI 解讀查證 (Metrics & Verifying the AI's Interpretation)
 
@@ -90,13 +94,12 @@ ___
 你的 Cleaned 結果與參考值一致嗎？若一致，寫「一致」；若不一致，找出原因。（1 句）
 1.不一致
 2.我的中位數長度與資訊熵略低於參考值，可能與清洗後的條文合併或切塊結果不同有關，確切原因仍需比對兩版的清洗輸出。
-___
 
 ### 3.2 AI 的解讀
 
 > 把第 3.1 節的儀表板截圖 (`dashboard.png`) 交給 AI，請它解讀結果。將 AI 的回答**完整貼在這裡**，並註明使用的 AI 工具。
 
-- 使用的 AI 工具：ChatGPT
+- 使用的 AI 工具：codex
 
 ```text
 左上圖的橘線顯示，Cleaned 的 chunk 長度中位數高於 Raw。縱軸採對數刻度，清洗後仍有超過一萬字元的離群值。右上圖顯示兩組的 TAR 都是 100%，左下圖也顯示所有錨定 chunk 的標題深度都是 2。清洗後，深度 2 的 chunk 數量下降。
@@ -131,9 +134,10 @@ ___
 - 閱讀用檔案 (`.md`)：cleaned_A271010023_圖書館管理作業規範.md　從第 1187 行開始
 - 前 3 行內容：
   ```text
-  ## 1. Reader Account Login
+## 1. Reader Account Login
 
-- (1) Faculty members and students who are subject to the school-leaving procedure may use their identification cards issued by this School as library passes. Those who do not have the identification cards issued by this School shall use their own identity cards as library passes. Families of faculty and staff may borrow books by using the employee's identification card
+- (1) Faculty members and students who are subject to the school-leaving procedure may use their identification cards issued by this School as library passes. Those who do not have the identification cards issued by this School shall use their own identity cards as library passes. Families of faculty and staff may borrow books by using the employee's identification card issued by this School and the family member's own identity card.
+
   ```
 - 這是什麼樣的文字？為什麼會這麼長？這段英文規章從讀者帳號登入開始，接著涵蓋證件效期、借還書程序、預約、續借、借閱額度、逾期罰款與賠償。
 - 之後做問答檢索時，這麼長的 chunk 可能造成什麼問題？後續小節以普通編號開頭，切塊規則只在 ## 前切開，於是多個主題留在同一個 chunk。查詢「逾期一天罰多少」時，其他主題可能降低這個 chunk 的檢索相關性。如果系統截斷過長的文字，後面的罰款條文也可能遺失。
@@ -143,10 +147,20 @@ ___
 - 閱讀用檔案 (`.md`)：cleaned_A271010023_圖書館管理作業規範.md　從第 1826 行開始
 - 內容：
   ```text
-  ## 明志科技大學圖書館 非專任教職人員借閱服務申請單
+## 明志科技大學圖書館 非專任教職人員借閱服務申請單
 
-| 讀    | 填表日期 身分證字號/ 護照號碼   | 西元 年 月 日                                                                                                                  | 姓名 聯絡 電話                                                                                                                 |
-|-------|---------------------------------|---------------------------------------------------
+| 讀             | 填表日期             | 西元 年   | 月 日                             | 姓名                              |
+|----------------|----------------------|-----------|-----------------------------------|-----------------------------------|
+| 者 資          | 身分證字號/ 護照號碼 |           |                                   | 聯絡 電話                         |
+|                | E-mail               | 料        | 料                                | 料                                |
+| 讀 者 在 校 身 | □校友                | 學號      |                                   |                                   |
+|                | □校友                | 學制      | ○四技 ○研究所 ○二技 ○專科 ○其他： | ○四技 ○研究所 ○二技 ○專科 ○其他： |
+|                | □校友                | 畢業系所  |                                   |                                   |
+| 分             | □退休教職員          | 服務單位  |                                   |                                   |
+
+| 圖書館收件   | 西元   | 年   | 月 日   | 收件經辦            |
+|--------------|--------|------|---------|---------------------|
+| 有效期間     | 西元   |      | 年 月   | 日 至 西元 年 月 日 |
   ```
 - 為什麼它的資訊熵這麼低？它對問答檢索有用嗎？這是一張空白借閱服務申請單。表格用大量空白、連字號及直線對齊，且身分別和校內相關單位的選項在相鄰欄位重複出現，使字元分布集中。這個 chunk 可以回答「申請單需要填哪些欄位」或「需要誰簽章」。若要回答完整的申請資格或借閱期限，還要查對應的規章正文。
 
